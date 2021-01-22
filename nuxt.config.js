@@ -18,6 +18,25 @@ export default {
     ]
   },
 
+  pwa: {
+    manifest: {
+      name: 'Pwa',
+      short_name: 'pwa',
+      lang: 'en',
+      description: 'Pwa testing',
+      icons: [
+        {
+          source: '@/static/icon.png'
+        },
+      ],
+      theme_color: '#3aa9c0',
+      useWebmanifestExtension: false
+    },
+    workbox: {
+      enabled: true,
+    }
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
   ],
