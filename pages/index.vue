@@ -1,6 +1,8 @@
 <template>
   <div class="container">
     <button @click="connectBluetooth()">Connect Bluetooth</button>
+    <button @click="sensor()">Sensor</button>
+    <button @click="contactPicker()">Contacts</button>
     <input type="file" accept="image/*" capture="camera" />
     {{ response }}
   </div>
@@ -23,6 +25,22 @@ export default {
         console.log(err)
         this.response = err
       })
+    },
+    async sensor(){
+      if('IdleDetector' in window){
+          const state = await IdleDetector.requestPermission()
+          alert(state)
+      }
+    },
+    async contactPicker(){
+      const props = ['name', 'email', 'tel', 'address', 'icon'];
+      const opts = {multiple: true};
+      const supported = ('contacts' in navigator && 'ContactsManager' in window);
+      alert(supported)
+          if (supported) {
+              const contacts = await navigator.contacts.select(props, opts);
+              console.log(contacts)
+          }
     }
   }
 }
