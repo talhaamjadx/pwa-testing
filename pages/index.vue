@@ -23,14 +23,19 @@ export default {
   },
   methods:{
     async connectBluetooth(){
-      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }).then(res => {
-        console.log(res)
-        this.response = res
-      })
-      .catch(err => {
-        console.log(err)
-        this.response = err
-      })
+      const device = await navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] });
+      const server = await device.gatt.connect();
+
+      // Get heart rate data
+      const hr = await server.getPrimaryService('heart_rate');
+      const hrMeasurement = await hr.getCharacteristic('heart_rate_measurement');
+
+      // Listen to changes on device
+      await hrMeasurement.startNotifications(); 
+
+      hrMeasurement.addEventListener('characteristicvaluechanged', (e) => {
+          console.log(parseHeartRate(e.target.value));
+      });
     },
     async sensor(){
       if('IdleDetector' in window){
