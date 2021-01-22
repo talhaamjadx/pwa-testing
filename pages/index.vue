@@ -1,14 +1,28 @@
 <template>
   <div class="container">
     <button @click="connectBluetooth()">Connect Bluetooth</button>
+    <input type="file" accept="image/*" capture="camera" />
+    {{ response }}
   </div>
 </template>
 
 <script>
 export default {
+  data(){
+    return{
+      response: ""
+    }
+  },
   methods:{
     async connectBluetooth(){
-      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true })
+      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true }).then(res => {
+        console.log(res)
+        this.response = res
+      })
+      .catch(err => {
+        console.log(err)
+        this.response = err
+      })
     }
   }
 }
