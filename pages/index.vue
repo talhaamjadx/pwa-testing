@@ -1,36 +1,18 @@
 <template>
   <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        pwa-testing
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
-    </div>
+    <button @click="connectBluetooth()">Connect Bluetooth</button>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  methods:{
+    async connectBluetooth(){
+      const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true })
+    }
+  }
+}
 </script>
-
 <style>
 .container {
   margin: 0 auto;
