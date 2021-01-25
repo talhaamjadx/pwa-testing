@@ -22,7 +22,7 @@ export default {
   mounted(){
     window.navigator.geolocation.getCurrentPosition(console.log)
     window.addEventListener('devicemotion', (event) => {
-      console.log(event)
+      //console.log(event)
     })
   },
   methods:{
