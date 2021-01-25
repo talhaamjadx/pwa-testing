@@ -37,6 +37,11 @@ export default {
     },
     workbox: {
       enabled: true,
+      cacheNames:{
+        prefix: 'my-app',
+        suffix: 'v1'
+      },
+      offlinePage: "@/pages/offline.html"
     }
   },
 

@@ -5,6 +5,9 @@
     <button @click="contactPicker()">Contacts</button>
     <input type="file" accept="image/*" capture="camera" />
     {{ response }}
+    <button @click="fileSystemAPI()">Select a file</button>
+    <textarea v-model="contents" name="" id="" cols="30" rows="10"></textarea>
+    <button @click="saveAs()">Save As</button>
   </div>
 </template>
 
@@ -12,7 +15,8 @@
 export default {
   data(){
     return{
-      response: ""
+      response: "",
+      contents: "",
     }
   },
   mounted(){
@@ -38,6 +42,7 @@ export default {
       });
     },
     async sensor(){
+      console.log(window)
       if('IdleDetector' in window){
           const state = await IdleDetector.requestPermission()
           alert(state)
@@ -52,6 +57,36 @@ export default {
               const contacts = await navigator.contacts.select(props, opts);
               console.log(contacts)
           }
+    },
+
+    async createNewFile(){
+      const options = {
+        types: [
+          {
+            description: 'Text Files',
+            accept: {
+              'text/plain': ['.txt'],
+            },
+          },
+        ],
+      }
+      const handle = await window.showSaveFilePicker(options);
+         return handle;
+    },
+
+    async saveAs(){
+      let newFileHandle = await this.createNewFile()
+      let writable = await newFileHandle.createWritable()
+      await writable.write(this.contents);
+      await writable.close();
+    },
+
+    async fileSystemAPI(){
+      let [fileHandle] = await window.showOpenFilePicker()
+      console.log({fileHandle})
+      let file = await fileHandle.getFile()
+      this.contents = await file.text()
+      console.log(this.contents)
     }
   }
 }
