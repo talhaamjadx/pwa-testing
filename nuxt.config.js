@@ -41,7 +41,6 @@ export default {
         prefix: 'my-app',
         suffix: 'v1'
       },
-      offlinePage: "@/pages/offline.html"
     }
   },
 
