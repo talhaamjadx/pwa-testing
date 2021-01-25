@@ -8,6 +8,7 @@
     <button @click="fileSystemAPI()">Select a file</button>
     <textarea v-model="contents" name="" id="" cols="30" rows="10"></textarea>
     <button @click="saveAs()">Save As</button>
+    <button @click="displayNotification()">Show Notification</button>
   </div>
 </template>
 
@@ -20,12 +21,31 @@ export default {
     }
   },
   mounted(){
+    Notification.requestPermission(function(status) {
+        console.log('Notification permission status:', status);
+    });
     window.navigator.geolocation.getCurrentPosition(console.log)
     window.addEventListener('devicemotion', (event) => {
       //console.log(event)
     })
   },
   methods:{
+    displayNotification() {
+      if (Notification.permission == 'granted') {
+        navigator.serviceWorker.getRegistration().then(function(reg) {
+          var options = {
+            body: 'Here is a notification body!',
+            icon: require('@/assets/icon.png'),
+            vibrate: [100, 50, 100],
+            data: {
+              dateOfArrival: Date.now(),
+              primaryKey: 1
+            }
+          };
+          reg.showNotification('Hello world!', options);
+        });
+      }
+    },
     async connectBluetooth(){
       const device = await navigator.bluetooth.requestDevice({ filters: [{ services: ['heart_rate'] }] });
       const server = await device.gatt.connect();
